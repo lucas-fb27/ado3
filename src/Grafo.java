@@ -52,8 +52,8 @@ public class Grafo<TIPO> {
         return getCaminho(origem, destino);
     }
 
-    // Retorna o caminho entre dois pontos
-    public ArrayList<TIPO> getCaminho(TIPO origem, TIPO destino) {
+    // Algoritmo de Dijkstra - retorna distancias e predecessores
+    private ResultadoDijkstra dijkstraCompleto(TIPO origem) {
         HashMap<Vertice<TIPO>, Double> distancias = new HashMap<Vertice<TIPO>, Double>();
         HashMap<Vertice<TIPO>, Vertice<TIPO>> predecessores = new HashMap<Vertice<TIPO>, Vertice<TIPO>>();
         ArrayList<Vertice<TIPO>> naoVisitados = new ArrayList<Vertice<TIPO>>();
@@ -100,17 +100,23 @@ public class Grafo<TIPO> {
             }
         }
 
-        // Reconstruir caminho
+        return new ResultadoDijkstra(distancias, predecessores);
+    }
+
+    // Retorna o caminho entre dois pontos
+    public ArrayList<TIPO> getCaminho(TIPO origem, TIPO destino) {
+        ResultadoDijkstra resultado = dijkstraCompleto(origem);
         ArrayList<TIPO> caminho = new ArrayList<TIPO>();
         Vertice<TIPO> vDestino = getVertice(destino);
-        if (vDestino == null || distancias.get(vDestino) == Double.MAX_VALUE) {
+        
+        if (vDestino == null || resultado.distancias.get(vDestino) == Double.MAX_VALUE) {
             return caminho;
         }
 
         Vertice<TIPO> atual = vDestino;
         while (atual != null) {
             caminho.add(0, atual.getDado());
-            atual = predecessores.get(atual);
+            atual = resultado.predecessores.get(atual);
         }
 
         return caminho;
@@ -118,49 +124,19 @@ public class Grafo<TIPO> {
 
     // Calcula todas as distancias a partir de uma origem
     public HashMap<Vertice<TIPO>, Double> calcularDistancias(TIPO origem) {
-        HashMap<Vertice<TIPO>, Double> distancias = new HashMap<Vertice<TIPO>, Double>();
-        ArrayList<Vertice<TIPO>> naoVisitados = new ArrayList<Vertice<TIPO>>();
+        ResultadoDijkstra resultado = dijkstraCompleto(origem);
+        return resultado.distancias;
+    }
 
-        // Inicializar
-        for (Vertice<TIPO> v : this.vertices) {
-            if (v.getDado().equals(origem)) {
-                distancias.put(v, 0.0);
-            } else {
-                distancias.put(v, Double.MAX_VALUE);
-            }
-            naoVisitados.add(v);
+    // Classe interna para armazenar resultado do Dijkstra
+    private class ResultadoDijkstra {
+        HashMap<Vertice<TIPO>, Double> distancias;
+        HashMap<Vertice<TIPO>, Vertice<TIPO>> predecessores;
+
+        ResultadoDijkstra(HashMap<Vertice<TIPO>, Double> distancias, 
+                         HashMap<Vertice<TIPO>, Vertice<TIPO>> predecessores) {
+            this.distancias = distancias;
+            this.predecessores = predecessores;
         }
-
-        // Processar vertices
-        while (naoVisitados.size() > 0) {
-            Vertice<TIPO> atual = null;
-            double menorDist = Double.MAX_VALUE;
-
-            for (Vertice<TIPO> v : naoVisitados) {
-                double dist = distancias.get(v);
-                if (dist < menorDist) {
-                    menorDist = dist;
-                    atual = v;
-                }
-            }
-
-            if (atual == null || menorDist == Double.MAX_VALUE) {
-                break;
-            }
-
-            naoVisitados.remove(atual);
-
-            for (Aresta<TIPO> aresta : atual.getArestasSaida()) {
-                Vertice<TIPO> vizinho = aresta.getFim();
-                if (naoVisitados.contains(vizinho)) {
-                    double novaDist = distancias.get(atual) + aresta.getPeso();
-                    if (novaDist < distancias.get(vizinho)) {
-                        distancias.put(vizinho, novaDist);
-                    }
-                }
-            }
-        }
-
-        return distancias;
     }
 }

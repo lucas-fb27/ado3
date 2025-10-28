@@ -48,6 +48,7 @@ public class MapaHeavenBuilder {
         adicionarArestaBidirecional(mapa, 3.49, "Long A", "Bomb A");
         adicionarArestaBidirecional(mapa, 3.01, "Lobby A", "Rato");
         adicionarArestaBidirecional(mapa, 4.53, "Rato", "Bomb A");
+        adicionarArestaBidirecional(mapa, 4.3, "Link A", "Bomb A");
         
         return mapa;
     }
@@ -56,7 +57,6 @@ public class MapaHeavenBuilder {
      * Adiciona conexões extras para o lado Defensor
      */
     public static void adicionarConexoesDefensor(Grafo<String> mapa) {
-        adicionarArestaBidirecional(mapa, 4.3, "Link A", "Bomb A");
         adicionarArestaBidirecional(mapa, 7.2, "Link A", "Ceu");
         adicionarArestaBidirecional(mapa, 5.7, "Link A", "Base Defensora");
         adicionarArestaBidirecional(mapa, 7.6, "Base Defensora", "Ceu");

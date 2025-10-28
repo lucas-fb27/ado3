@@ -23,6 +23,10 @@ public class MapaService {
         }
     }
 
+    public boolean pontoExiste(String ponto) {
+        return mapa.getVertice(ponto) != null;
+    }
+
     public void verProximos(String ponto, int n) {
         Vertice<String> v = mapa.getVertice(ponto);
         if (v == null) {

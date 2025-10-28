@@ -2,7 +2,6 @@
  * Classe de demonstração com exemplos de uso do sistema
  */
 public class TesteMapaHeaven {
-    
     public static void main(String[] args) {
         System.out.println("========================================");
         System.out.println("   TESTES - MAPA HEAVEN");
