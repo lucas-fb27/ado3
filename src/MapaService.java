@@ -3,22 +3,18 @@ import java.util.HashMap;
 
 public class MapaService {
     private Grafo<String> mapa;
-    private String lado;
 
     public MapaService() {
         this.mapa = MapaHeavenBuilder.construirMapaBase();
-        this.lado = "ATACANTE";
     }
 
     public void escolherLado(String lado) {
         if (lado.equalsIgnoreCase("DEFENSOR")) {
             this.mapa = MapaHeavenBuilder.construirMapaBase();
             MapaHeavenBuilder.adicionarConexoesDefensor(this.mapa);
-            this.lado = "DEFENSOR";
             System.out.println("Lado DEFENSOR escolhido");
         } else {
             this.mapa = MapaHeavenBuilder.construirMapaBase();
-            this.lado = "ATACANTE";
             System.out.println("Lado ATACANTE escolhido");
         }
     }
